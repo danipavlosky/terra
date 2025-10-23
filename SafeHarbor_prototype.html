@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SafeHarbor — Demo</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#7dd3fc; --muted:#94a3b8; --danger:#fb7185; --ok:#34d399;
+      --glass: rgba(255,255,255,0.04);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#071022 0%,#092338 60%); color:#e6eef5; -webkit-font-smoothing:antialiased; line-height:1.4;}
+    header{padding:28px 20px; display:flex; align-items:center; gap:20px;}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:700;color:#032; box-shadow:0 6px 18px rgba(7,18,36,0.6);}
+    h1{font-size:20px;margin:0}
+    nav{margin-left:auto; display:flex; gap:12px; align-items:center;}
+    a.btn{color:var(--accent); text-decoration:none; font-weight:600; padding:8px 12px; border-radius:8px; border:1px solid rgba(125,211,252,0.07); background:transparent;}
+    main{max-width:980px;margin:0 auto;padding:10px;}
+    .hero{display:flex; gap:20px; align-items:center; margin-top:12px;}
+    .hero .left{flex:1}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:18px; border-radius:12px; box-shadow:0 8px 30px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.03)}
+    .cta{display:inline-flex; gap:10px; margin-top:12px; align-items:center}
+    .primary{background:var(--accent); color:#012; padding:10px 14px; border-radius:10px; font-weight:700; border:none; cursor:pointer;}
+    .muted{background:transparent; color:var(--muted); padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); cursor:pointer;}
+    .features{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; margin-top:18px;}
+    .feature{padding:12px; border-radius:10px; background:var(--glass); border:1px solid rgba(255,255,255,0.02)}
+    .small{font-size:13px;color:var(--muted)}
+    footer{max-width:980px;margin:28px auto 60px; color:var(--muted); font-size:13px; text-align:center}
+    /* toast */
+    .toast-wrap{position:fixed; right:18px; bottom:18px; display:flex; flex-direction:column; gap:12px; z-index:9999;}
+    .toast{background:#042028; color:#dff7ff; padding:12px 14px; border-radius:10px; box-shadow:0 8px 28px rgba(2,6,23,0.7); border:1px solid rgba(125,211,252,0.06); min-width:220px;}
+    .grid{display:grid; grid-template-columns:1fr 340px; gap:14px; margin-top:18px;}
+    .panel{padding:12px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.02)}
+    label{display:block; font-size:13px; color:var(--muted); margin-bottom:6px}
+    input, textarea, select{width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit; font-size:14px}
+    .tiny{font-size:12px;color:var(--muted)}
+    .report-list{margin-top:10px; display:flex; flex-direction:column; gap:8px; max-height:220px; overflow:auto}
+    .ritem{padding:10px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid rgba(255,255,255,0.01);}
+    .resources{display:flex;flex-direction:column;gap:8px}
+    .pill{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.02);font-size:12px;color:var(--muted);}
+    .danger{color:var(--danger)}
+    .ok{color:var(--ok)}
+    @media(max-width:880px){.grid{grid-template-columns:1fr} header{padding:18px} .logo{width:44px;height:44px}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">SH</div><div><h1>SafeHarbor</h1><div class="small">An inclusive anti-bullying + sexual-health support demo</div></div></div>
+  <nav>
+    <a class="btn" id="nav-demo">Demo</a>
+    <a class="btn" id="nav-resources">Resources</a>
+    <a class="btn" id="nav-report">Report</a>
+  </nav>
+</header>
+<main>
+  <section class="hero">
+    <div class="left card">
+      <h2>Make scenes safer. Keep people home.</h2>
+      <p class="small">SafeHarbor is a demo concept for an inclusive anti-bullying and sexual-health support app built for nightlife workers, creatives, parents, and allies. It focuses on safety plans, nonjudgmental sexual-health info (PrEP/PEP/condoms), anonymous reporting, and daily compassionate reminders.</p>
+      <div class="cta">
+        <button class="primary" id="toggle-reminders">Enable daily reminders (demo)</button>
+        <button class="muted" id="open-safety">Safety Check</button>
+      </div>
+
+      <div class="features" style="margin-top:18px;">
+        <div class="feature"><strong>Daily affirmations & nudges</strong><div class="small">Supportive nonjudgmental messages and harm-reduction tips that you control.</div></div>
+        <div class="feature"><strong>Quick PEP / PrEP guidance</strong><div class="small">What to do immediately after exposure, and where to find ongoing prevention.</div></div>
+        <div class="feature"><strong>Anonymous incident reporting</strong><div class="small">Report harassment or coercion safely—share with venues or advocates.</div></div>
+        <div class="feature"><strong>Parent & ally toolkit</strong><div class="small">How to talk to kids about orientation/gender without shame, and steps to protect health.</div></div>
+      </div>
+    </div>
+
+    <aside style="width:320px">
+      <div class="card">
+        <h3 class="small">Demo quick actions</h3>
+        <div style="display:flex; gap:8px; margin-top:8px;"><button class="primary" id="reminder-now">Show reminder</button><button class="muted" id="aff-next">Affirmation</button></div>
+        <div style="margin-top:12px"><em class="tiny">Privacy:</em> This demo stores nothing to a server. All data is local to your browser.</div>
+      </div>
+      <div style="height:14px"></div>
+      <div class="card panel">
+        <h4 class="small">Quick Helplines</h4>
+        <div class="resources">
+          <div><span class="pill">If in immediate danger</span> Call your local emergency number (911 in the US)</div>
+          <div><span class="pill">US mental-health</span> Call or text 988</div>
+          <div><span class="pill">Sexual-assault</span> Rape crisis centers (locally)</div>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <div class="grid" id="main-grid">
+    <section class="card">
+      <h3>Report bullying (anonymous)</h3>
+      <p class="small">Use this to record non-urgent incidents. Reported items are stored locally in your browser for demo purposes; a real app would optionally forward encrypted reports to venue admins or trusted advocates.</p>
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <div style="flex:1">
+          <label>Incident summary</label>
+          <input id="r-summary" placeholder="Short note (who/where/when)">
+        </div>
+        <div style="width:140px">
+          <label>Severity</label>
+          <select id="r-sev"><option value="low">Low</option><option value="med">Medium</option><option value="high">High</option></select>
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <label>Details (optional)</label>
+        <textarea id="r-details" rows="4" placeholder="Describe what happened, if you feel safe"></textarea>
+      </div>
+      <div style="display:flex; gap:8px; margin-top:10px;">
+        <button class="primary" id="save-report">Save report</button>
+        <button class="muted" id="clear-reports">Clear demo reports</button>
+      </div>
+
+      <div class="report-list" id="report-list" aria-live="polite" style="margin-top:12px"></div>
+    </section>
+
+    <aside class="panel card">
+      <h4 class="small">Resources — Sexual Health</h4>
+      <div class="small" style="margin-top:8px">
+        <strong>PEP</strong>: Post-Exposure Prophylaxis — <em>must</em> be started <strong>within 72 hours</strong> after a possible exposure and is prescribed for ~28 days. Seek an ER or urgent sexual-health clinic immediately.
+      </div>
+      <div class="small" style="margin-top:8px">
+        <strong>PrEP</strong>: Daily or long-acting prevention for people who have ongoing risk. Highly effective when taken as prescribed. Not a vaccine—prevents infection when used correctly.
+      </div>
+      <div class="small" style="margin-top:8px">
+        <strong>Condoms & testing</strong>: Condoms reduce risk for HIV and many STIs. Regular testing and access to care are crucial; many cities offer low-cost or free clinics.
+      </div>
+      <div class="small" style="margin-top:12px">
+        <strong>Stigma & safety note</strong>: HIV is driven by conditions (access to care, criminalization, violence), not by moral worth. This app opposes shaming language (we do not use slurs) and supports nonjudgmental care.
+      </div>
+      <div style="margin-top:12px; display:flex; gap:8px;"><button class="primary" id="open-parent">Parent Guide</button><button class="muted" id="open-venue">Venue Kit</button></div>
+    </aside>
+  </div>
+
+  <section style="margin-top:18px" class="card">
+    <h3 class="small">Parent & ally guidance (short)</h3>
+    <p class="small">If your child is bisexual or exploring identity: listen more than you lecture. Risk reduction is about tools and dignity, not shame.</p>
+    <ul class="small">
+      <li>Encourage regular sexual-health checkups and vaccination (HPV, Hep A/B, flu).</li>
+      <li>Teach consent, boundaries, and safer-sex basics (condoms, PrEP, PEP).</li>
+      <li>Protect privacy; if a child discloses, ask how they want support.</li>
+      <li>Find affirming clinicians and local community centers.</li>
+    </ul>
+  </section>
+
+  <div style="height:18px"></div>
+
+  <section id="resources" class="card" style="margin-bottom:18px">
+    <h3 class="small">Short FAQ (accurate & simple)</h3>
+    <div class="small"><strong>Can PrEP/PEP "build immunity"?</strong> No. PrEP and PEP prevent HIV when used properly, but they do not create lasting immune memory like vaccines.</div>
+    <div style="margin-top:8px" class="small"><strong>Does being trans or a sex worker mean someone will get HIV?</strong> No. Risk is associated with lack of access to prevention, coercion, and structural barriers, not identity. Reducing stigma and increasing access protects everyone.</div>
+    <div style="margin-top:8px" class="small"><strong>What if I see a dangerous client or coercion?</strong> Prioritize safety—leave, call a buddy, get to a public place, and contact emergency services if threatened. If safe, document details and report.</div>
+  </section>
+
+  <div style="height:30px"></div>
+
+  <section class="card">
+    <h3 class="small">Prototype settings & privacy</h3>
+    <div class="small">This demo is local-only: reports and preferences are stored in your browser. Real apps must encrypt sensitive data, provide anonymized reporting, and comply with local laws (COPPA, GDPR, local health regulations).</div>
+    <div style="margin-top:10px; display:flex; gap:10px;">
+      <button class="muted" id="export-data">Export demo data</button>
+      <button class="muted" id="erase-local">Erase local demo data</button>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast-wrap" id="toasts"></div>
+
+<footer>SafeHarbor demo — prototype. This demo intentionally avoids shameful language and is designed to support safety, consent, and evidence-based sexual-health guidance.</footer>
+
+<script>
+// small helper utilities
+function toast(msg, cls='') {
+  const wrap = document.getElementById('toasts');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  if (cls) el.classList.add(cls);
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(()=>{ el.style.opacity=0; setTimeout(()=>el.remove(),400)}, 6000);
+}
+
+const AFFIRMATIONS = [
+  "You belong. Safety is not optional.",
+  "Boundaries are brave and simple.",
+  "Testing is power—knowledge is not shame.",
+  "Love and safety can coexist.",
+  "If you need help, you deserve help."
+];
+
+// Reminders (demo): show a toast every 18s when enabled.
+let reminderInterval = null;
+
+function enableReminders() {
+  if (reminderInterval) return;
+  reminderInterval = setInterval(()=>{
+    const idx = Math.floor(Math.random()*AFFIRMATIONS.length);
+    toast("Reminder: " + AFFIRMATIONS[idx]);
+  }, 18000); // 18s demo; real app daily schedule or push notifications.
+  toast("Daily reminders enabled (demo every 18s).");
+  document.getElementById('toggle-reminders').textContent = "Disable daily reminders (demo)";
+}
+function disableReminders() {
+  if (reminderInterval) clearInterval(reminderInterval);
+  reminderInterval = null;
+  toast("Daily reminders disabled.");
+  document.getElementById('toggle-reminders').textContent = "Enable daily reminders (demo)";
+}
+
+// Quick demo handlers
+document.getElementById('toggle-reminders').addEventListener('click', ()=>{
+  if (reminderInterval) disableReminders(); else enableReminders();
+});
+document.getElementById('reminder-now').addEventListener('click', ()=>{
+  const idx = Math.floor(Math.random()*AFFIRMATIONS.length);
+  toast("Reminder: " + AFFIRMATIONS[idx]);
+});
+document.getElementById('aff-next').addEventListener('click', ()=>{
+  const idx = Math.floor(Math.random()*AFFIRMATIONS.length);
+  toast("Affirmation: " + AFFIRMATIONS[idx]);
+});
+
+// Safety check modal demo
+document.getElementById('open-safety').addEventListener('click', ()=>{
+  const q = confirm("Safety quick-check:\\nAre you in immediate danger? ('OK' = yes)");
+  if (q) {
+    toast("If you're in immediate danger, call your local emergency number now.");
+    return;
+  }
+  const buddy = prompt("Do you want to send a 'safe check' to a buddy? Enter mobile/email (demo):");
+  if (buddy) {
+    toast("Demo: 'Safe check' sent to " + buddy + " (local only).");
+  } else {
+    toast("Okay — keep this page open and follow your plan.");
+  }
+});
+
+// Report saving (local only)
+function loadReports() {
+  const raw = localStorage.getItem('sh_reports');
+  if (!raw) return [];
+  try { return JSON.parse(raw) } catch(e){ return [] }
+}
+function saveReports(arr) {
+  localStorage.setItem('sh_reports', JSON.stringify(arr));
+}
+function renderReports() {
+  const list = document.getElementById('report-list');
+  list.innerHTML='';
+  const reps = loadReports();
+  if (!reps.length) { list.innerHTML='<div class="tiny">No demo reports</div>'; return; }
+  reps.forEach(r=>{
+    const d = document.createElement('div'); d.className='ritem';
+    d.innerHTML = "<strong>"+(r.summary||"(no summary)")+"</strong><div class='tiny'>Severity: "+r.severity+"</div><div class='tiny'>"+(r.details||'')+"</div>";
+    list.appendChild(d);
+  });
+}
+
+document.getElementById('save-report').addEventListener('click', ()=>{
+  const s = document.getElementById('r-summary').value.trim();
+  const sev = document.getElementById('r-sev').value;
+  const details = document.getElementById('r-details').value.trim();
+  const reps = loadReports();
+  reps.unshift({summary:s, severity:sev, details:details, time:new Date().toISOString()});
+  saveReports(reps);
+  renderReports();
+  document.getElementById('r-summary').value=''; document.getElementById('r-details').value='';
+  toast("Incident saved locally. In a production app you could forward an encrypted report to venue admins.");
+});
+
+document.getElementById('clear-reports').addEventListener('click', ()=>{
+  localStorage.removeItem('sh_reports'); renderReports(); toast("Demo reports cleared.");
+});
+renderReports();
+
+// Export / erase demo data
+document.getElementById('export-data').addEventListener('click', ()=>{
+  const data = {reports:loadReports(), settings:{reminders: !!reminderInterval}};
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='safeharbor-demo-data.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  toast("Demo data exported to JSON file.");
+});
+document.getElementById('erase-local').addEventListener('click', ()=>{
+  if (!confirm("Erase all demo data (local only)?")) return;
+  localStorage.clear(); renderReports(); toast("Local demo data erased.");
+});
+
+// Navigation anchors to demo sections
+document.getElementById('nav-demo').addEventListener('click', ()=>{ window.scrollTo({top:0,behavior:'smooth'}) });
+document.getElementById('nav-resources').addEventListener('click', ()=>{ document.getElementById('resources').scrollIntoView({behavior:'smooth'}) });
+document.getElementById('nav-report').addEventListener('click', ()=>{ document.querySelector('#report-list').scrollIntoView({behavior:'smooth'}) });
+
+// Parent & venue quick buttons (demo)
+document.getElementById('open-parent').addEventListener('click', ()=>{
+  toast("Parent Guide: listen, affirm, and ensure access to care. Encourage local clinician visit. (Demo)");
+});
+document.getElementById('open-venue').addEventListener('click', ()=>{
+  toast("Venue Kit: post a green-room code, provide condoms, buddy-system, and nonjudgmental clinic nights. (Demo)");
+});
+
+// friendly disclaimer toast
+setTimeout(()=>toast("Demo loaded: SafeHarbor prototype is local-only and designed to be inclusive and nonjudgmental."),800);
+
+</script>
+</body>
+</html>
